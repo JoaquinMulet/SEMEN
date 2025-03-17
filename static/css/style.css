@@ -1,0 +1,159 @@
+/* Custom styles for the Football League app */
+
+/* General styles */
+body {
+    background-color: #f8f9fa;
+}
+
+/* Card styles */
+.card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.card-header {
+    border-radius: 10px 10px 0 0 !important;
+}
+
+/* Team card styles */
+.team-card {
+    transition: transform 0.3s;
+}
+
+.team-card:hover {
+    transform: translateY(-5px);
+}
+
+.team-header {
+    padding: 15px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.team1-header {
+    background-color: #007bff;
+    color: white;
+}
+
+.team2-header {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Player item styles */
+.player-item {
+    padding: 10px 15px;
+    transition: background-color 0.2s;
+}
+
+.player-item:hover {
+    background-color: #f8f9fa;
+}
+
+/* Match result styles */
+.match-result {
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.win {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.loss {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Button styles */
+.btn {
+    border-radius: 5px;
+    font-weight: 500;
+}
+
+/* Table styles */
+.table th {
+    font-weight: 600;
+}
+
+/* Navbar styles */
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+/* Footer styles */
+footer {
+    margin-top: 50px;
+    padding: 20px 0;
+}
+
+/* Form styles */
+.form-control, .form-select {
+    border-radius: 5px;
+}
+
+/* Player selection styles */
+.player-selection-container {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.player-selection-container .form-check {
+    margin-bottom: 8px;
+    padding: 5px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.player-selection-container .form-check:hover {
+    background-color: #f0f0f0;
+}
+
+.player-selection-container .form-check-input:checked + .form-check-label {
+    font-weight: bold;
+}
+
+/* Team lists styles */
+#team1-list, #team2-list {
+    min-height: 100px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+#team1-list .list-group-item, #team2-list .list-group-item {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+}
+
+.remove-player {
+    padding: 0.1rem 0.4rem;
+    font-size: 0.8rem;
+}
+
+/* Stats display */
+.display-4 {
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .display-4 {
+        font-size: 1.8rem;
+    }
+    
+    .team-header {
+        font-size: 1rem;
+    }
+}

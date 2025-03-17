@@ -1,0 +1,288 @@
+/* Estilos para el Team Builder con aspecto de ESPN Champions League */
+.champions-header {
+    background: linear-gradient(to right, #001e3c, #003366);
+    color: white;
+    padding: 15px 0;
+    margin-bottom: 20px;
+    border-bottom: 3px solid #0099ff;
+    position: relative;
+}
+
+.champions-logo {
+    width: 60px;
+    height: 60px;
+    margin-right: 15px;
+}
+
+.team-vs-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.team-name-display {
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+    padding: 10px 20px;
+    min-width: 200px;
+}
+
+.team1-name {
+    background-color: #0066cc;
+    color: white;
+    border-radius: 5px 0 0 5px;
+}
+
+.team2-name {
+    background-color: #cc0000;
+    color: white;
+    border-radius: 0 5px 5px 0;
+}
+
+.vs-badge {
+    background-color: #003366;
+    color: white;
+    padding: 5px 15px;
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 50%;
+    margin: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+}
+
+.team-logo {
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 10px;
+}
+
+.team-logo img {
+    max-width: 30px;
+    max-height: 30px;
+}
+
+/* Campo de fútbol - Reemplazado por el nuevo diseño */
+.field-container {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+
+/* Estilo para los jugadores en la cancha */
+.field-player {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 10;
+}
+
+.player-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    margin: 0 auto 5px;
+}
+
+.team1-icon {
+    background-color: #0066cc;
+}
+
+.team2-icon {
+    background-color: #cc0000;
+}
+
+.player-name {
+    color: white;
+    font-size: 10px;
+    text-shadow: 1px 1px 1px #000;
+    background-color: rgba(0,0,0,0.5);
+    padding: 2px 5px;
+    border-radius: 3px;
+    white-space: nowrap;
+}
+
+.player-captain {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 15px;
+    height: 15px;
+    background-color: #ffcc00;
+    color: #000;
+    border-radius: 50%;
+    font-size: 10px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #000;
+}
+
+/* Formaciones y tablas de jugadores */
+.formations-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.formation-badge {
+    background-color: #003366;
+    color: white;
+    padding: 5px 15px;
+    font-weight: bold;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.team-table {
+    width: 100%;
+    background-color: #f8f9fa;
+    border-collapse: collapse;
+}
+
+.team-table th {
+    background-color: #003366;
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
+
+.team-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.team1-table th {
+    background-color: #0066cc;
+}
+
+.team2-table th {
+    background-color: #cc0000;
+}
+
+.player-number {
+    background-color: #003366;
+    color: white;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.team1-row .player-number {
+    background-color: #0066cc;
+}
+
+.team2-row .player-number {
+    background-color: #cc0000;
+}
+
+.player-position {
+    background-color: #f0f0f0;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Estadísticas */
+.stats-container {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    text-align: center;
+    padding: 15px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.stat-title {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 10px;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #003366;
+}
+
+.team1-stat {
+    color: #0066cc;
+}
+
+.team2-stat {
+    color: #cc0000;
+}
+
+/* Botones de acción */
+.action-buttons {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.btn-champions {
+    background-color: #003366;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-weight: bold;
+    margin: 0 10px;
+}
+
+.btn-champions:hover {
+    background-color: #004080;
+    color: white;
+}
+
+.btn-champions-save {
+    background-color: #006600;
+}
+
+.btn-champions-save:hover {
+    background-color: #008000;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .team-vs-container {
+        flex-direction: column;
+    }
+    
+    .team-name-display {
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+    
+    .field-container {
+        height: 400px;
+    }
+}

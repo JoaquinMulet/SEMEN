@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+
+{% block title %}Gestión de Estadios - Liga de Fútbol{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">Agregar Estadio</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('routes.venues') }}">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nombre del Estadio</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Dirección</label>
+                        <input type="text" class="form-control" id="address" name="address">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar Estadio</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">Estadios Disponibles</h5>
+            </div>
+            <div class="card-body">
+                {% if venues %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>Nombre</th>
+                                <th>Dirección</th>
+                                <th>Descripción</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for venue in venues %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ venue.name }}</td>
+                                <td>{{ venue.address }}</td>
+                                <td>{{ venue.description|truncate(50) }}</td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-primary btn-sm edit-venue-btn" 
+                                                data-venue-id="{{ venue.id }}"
+                                                data-venue-name="{{ venue.name }}"
+                                                data-venue-address="{{ venue.address }}"
+                                                data-venue-description="{{ venue.description }}">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <form method="POST" action="{{ url_for('routes.delete_venue', venue_id=venue.id) }}" class="d-inline">
+                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar este estadio?')">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info">No hay estadios registrados. Agrega el primero utilizando el formulario.</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para editar estadio -->
+<div class="modal fade" id="editVenueModal" tabindex="-1" aria-labelledby="editVenueModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="editVenueModalLabel">Editar Estadio</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="{{ url_for('routes.edit_venue') }}">
+                <div class="modal-body">
+                    <input type="hidden" id="edit_venue_id" name="venue_id">
+                    <div class="mb-3">
+                        <label for="edit_name" class="form-label">Nombre del Estadio</label>
+                        <input type="text" class="form-control" id="edit_name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_address" class="form-label">Dirección</label>
+                        <input type="text" class="form-control" id="edit_address" name="address">
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_description" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="edit_description" name="description" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Manejar clics en botones de editar
+        const editButtons = document.querySelectorAll('.edit-venue-btn');
+        editButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const venueId = this.dataset.venueId;
+                const venueName = this.dataset.venueName;
+                const venueAddress = this.dataset.venueAddress || '';
+                const venueDescription = this.dataset.venueDescription || '';
+                
+                // Llenar el formulario del modal
+                document.getElementById('edit_venue_id').value = venueId;
+                document.getElementById('edit_name').value = venueName;
+                document.getElementById('edit_address').value = venueAddress;
+                document.getElementById('edit_description').value = venueDescription;
+                
+                // Mostrar el modal
+                const editModal = new bootstrap.Modal(document.getElementById('editVenueModal'));
+                editModal.show();
+            });
+        });
+    });
+</script>
+{% endblock %}

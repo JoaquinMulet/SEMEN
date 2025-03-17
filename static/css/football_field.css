@@ -1,0 +1,146 @@
+/*football_field.css*/
+
+/* Estilos para la cancha de fútbol */
+.ground {
+    width: 100%;
+    height: 500px;
+    position: relative;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.border {
+    background: white;
+    position: absolute;
+    z-index: 2;
+}
+
+.outline.border {
+    border: 4px solid white;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+}
+
+.center-line {
+    width: 4px;
+    height: 100%;
+    top: 0;
+    left: calc(50% - 4px/2);
+}
+
+.center-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 120px;
+    border: 4px solid white;
+    background: none;
+    top: calc(50% - 120px/2);
+    left: calc(50% - 120px/2);
+}
+
+.box {
+    top: 25%;
+    width: 16%;
+    height: 50%;
+    background: transparent;
+    border: 4px solid white;
+}
+
+.box.left {
+    left: 0;
+}
+
+.box.right {
+    right: 0;
+}
+
+.box.small {
+    top: 36%;
+    width: 8%;
+    height: 28%;
+}
+
+.box-d {
+    top: 35%;
+    width: 15%;
+    height: 30%;
+    background: transparent;
+    border: 4px solid white;
+}
+
+.box-d.left {
+    left: 5%;
+    border-left: none;
+    border-bottom-right-radius: 1000px;
+    border-top-right-radius: 1000px;
+    clip-path: inset(0 0 0 73%);
+}
+
+.box-d.right {
+    right: 5%;
+    border-right: none;
+    border-bottom-left-radius: 1000px;
+    border-top-left-radius: 1000px;
+    clip-path: inset(0 73% 0 0);
+}
+
+.spot {
+    width: 4px;
+    height: 4px;
+    border-radius: 4px;
+    top: calc(50% - 4px/2);
+}
+
+.spot.left {
+    left: 11%;
+}
+
+.spot.right {
+    right: 11%;
+}
+
+.spot.center {
+    width: 8px;
+    height: 8px;
+    left: calc(50% - 4px);
+}
+
+.corner {
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+    background: none;
+    border: 4px solid white;
+}
+
+.corner.top {
+    top: -20px;
+}
+
+.corner.left {
+    left: -20px;
+}
+
+.corner.bottom {
+    bottom: -20px;
+}
+
+.corner.right {
+    right: -20px;
+}
+
+.grass {
+    width: 100%;
+    height: 100%;
+    background-color: #358626;
+    background-image: repeating-linear-gradient(
+        90deg,
+        #358626,
+        #358626 50px,
+        #2e7520 50px,
+        #2e7520 100px
+    );
+    z-index: 1;
+    position: absolute;
+}

@@ -1,0 +1,11 @@
+# Entorno virtual
+venv/
+
+# Archivos de sistema
+__pycache__/
+*.py[cod]
+
+# Archivos de configuración de IDE
+.idea/
+*.sublime-workspace
+*.sublime-project

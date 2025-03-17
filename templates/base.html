@@ -1,0 +1,621 @@
+<!-- base.html -->
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SEMEN{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <!-- Importar la fuente Satoshi -->
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,301,701,300,501,401,901,400&display=swap" rel="stylesheet">
+    <style>
+        /* Variables para temas - Sistema centralizado */
+        :root {
+            /* Colores base */
+            --primary-color: #4CAF50;
+            --secondary-color: #2196F3;
+            --text-color: #212529;
+            --text-muted: #6c757d;
+            --bg-color: #f0f0f0;
+            --bg-secondary: #ffffff;
+            --nav-bg: #343a40;
+            --nav-text: #f8f9fa;
+            --border-color: #dee2e6;
+            
+            /* Sombras y efectos */
+            --card-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            --hover-bg: rgba(161, 161, 161, 0.05);
+            --transition-speed: 0.3s;
+            --btn-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            --hero-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            --gradient-overlay: linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 100%);
+            
+            /* Estados y resultados */
+            --win-bg: #d4edda;
+            --win-text: #155724;
+            --loss-bg: #f8d7da;
+            --loss-text: #721c24;
+            --team1-color: #007bff;
+            --team2-color: #dc3545;
+            
+            /* Variables para gráficos */
+            --chart-bg-color: #FFFFFF;
+            --chart-text-color: rgba(0, 0, 0, 0.7);
+            --chart-grid-color: rgba(0, 0, 0, 0.05);
+            --chart-legend-color: rgba(0, 0, 0, 0.7);
+            --chart-tooltip-bg: rgba(255, 255, 255, 0.95);
+            --chart-tooltip-text: rgba(0, 0, 0, 0.8);
+        }
+        
+        [data-theme="dark"] {
+            /* Colores base */
+            --primary-color: #5CDB95;
+            --secondary-color: #48A9E6;
+            --text-color: #E0E0E0;
+            --text-muted: #A0A0A0;
+            --bg-color: #121212;
+            --bg-secondary: #1E1E1E;
+            --nav-bg: #1E1E1E;
+            --nav-text: #FFFFFF;
+            --border-color: #333333;
+            
+            /* Sombras y efectos */
+            --card-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            --hover-bg: rgba(255, 255, 255, 0.05);
+            --btn-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            --hero-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            --gradient-overlay: linear-gradient(135deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.7) 100%);
+            
+            /* Estados y resultados */
+            --win-bg: #0d3a1b;
+            --win-text: #79e097;
+            --loss-bg: #3e1a1d;
+            --loss-text: #f8a4ac;
+            --team1-color: #0d6efd;
+            --team2-color: #dc3545;
+            
+            /* Variables para gráficos */
+            --chart-bg-color: #1E1E1E;
+            --chart-text-color: rgba(255, 255, 255, 0.7);
+            --chart-grid-color: rgba(255, 255, 255, 0.1);
+            --chart-legend-color: rgba(255, 255, 255, 0.8);
+            --chart-tooltip-bg: rgba(0, 0, 0, 0.85);
+            --chart-tooltip-text: rgba(255, 255, 255, 0.8);
+        }
+        
+        /* Aplicar Satoshi a toda la aplicación */
+        body {
+            font-family: 'Satoshi', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding-top: 56px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color var(--transition-speed) ease, 
+                        color var(--transition-speed) ease;
+        }
+        
+        main {
+            flex: 1 0 auto;
+            padding: 2rem 0;
+        }
+        
+        footer {
+            flex-shrink: 0;
+            padding: 1rem 0;
+            background-color: var(--nav-bg);
+            color: var(--nav-text);
+            transition: background-color var(--transition-speed) ease;
+        }
+        
+        .container {
+            max-width: 1200px;
+        }
+        
+        /* Aplicar Satoshi a todos los elementos tipográficos */
+        h1, h2, h3, h4, h5, h6, p, a, span, button, input, select, textarea, label, .btn, .nav-link, .navbar-brand, .table, .form-control, .form-select, .dropdown-item, .alert {
+            font-family: 'Satoshi', sans-serif !important;
+        }
+        
+        /* Estilo para la barra de navegación */
+        .navbar {
+            background-color: var(--nav-bg) !important;
+            transition: background-color var(--transition-speed) ease;
+        }
+        
+        .navbar-dark .navbar-brand,
+        .navbar-dark .nav-link {
+            color: var(--nav-text) !important;
+        }
+        
+        /* Estilos para tarjetas, botones y tablas */
+        .btn {
+            border-radius: 0;
+        }
+        
+        .card {
+            border-radius: 0;
+            box-shadow: var(--card-shadow);
+            background-color: var(--bg-secondary);
+            border-color: var(--border-color);
+            transition: background-color var(--transition-speed) ease,
+                        border-color var(--transition-speed) ease,
+                        box-shadow var(--transition-speed) ease;
+        }
+        
+        .table {
+            margin-bottom: 0;
+            color: var(--text-color);
+            border-color: var(--border-color);
+            transition: color var(--transition-speed) ease,
+                        border-color var(--transition-speed) ease;
+        }
+        
+        .table thead th {
+            border-bottom-color: var(--border-color);
+            color: var(--text-muted);
+        }
+        
+        .table td, .table th {
+            border-color: var(--border-color);
+        }
+        
+        .alert {
+            border-radius: 0;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 0;
+            background-color: var(--bg-secondary);
+            border-color: var(--border-color);
+            color: var(--text-color);
+            transition: background-color var(--transition-speed) ease,
+                        border-color var(--transition-speed) ease,
+                        color var(--transition-speed) ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            background-color: var(--bg-secondary);
+            color: var(--text-color);
+        }
+        
+        /* Estilos específicos de la aplicación */
+        .team-card {
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            background-color: var(--bg-secondary);
+        }
+        
+        .team-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .team-header {
+            border-radius: 10px 10px 0 0;
+            padding: 10px;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .team1-header {
+            background-color: var(--team1-color);
+        }
+        
+        .team2-header {
+            background-color: var(--team2-color);
+        }
+        
+        .player-item {
+            padding: 8px 15px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            transition: border-color var(--transition-speed) ease;
+        }
+        
+        .player-item:last-child {
+            border-bottom: none;
+        }
+        
+        .match-result {
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        
+        .win {
+            background-color: var(--win-bg);
+            color: var(--win-text);
+            transition: background-color var(--transition-speed) ease,
+                        color var(--transition-speed) ease;
+        }
+        
+        .loss {
+            background-color: var(--loss-bg);
+            color: var(--loss-text);
+            transition: background-color var(--transition-speed) ease,
+                        color var(--transition-speed) ease;
+        }
+        
+        /* Estilos para transiciones de tema */
+        .theme-transition {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .theme-transition.visible {
+            opacity: 1;
+        }
+        
+        /* Botón de modo oscuro en la barra de navegación */
+        .nav-darkmode-toggle {
+            border: none;
+            background: transparent;
+            color: var(--nav-text);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            margin-left: 0.5rem;
+        }
+        
+        .nav-darkmode-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-darkmode-toggle i {
+            font-size: 1rem;
+        }
+        
+        .nav-darkmode-toggle .sun-icon,
+        .nav-darkmode-toggle .moon-icon {
+            transition: all 0.3s ease;
+        }
+        
+        [data-theme="dark"] .nav-darkmode-toggle .sun-icon {
+            display: none;
+        }
+        
+        [data-theme="light"] .nav-darkmode-toggle .moon-icon {
+            display: none;
+        }
+        
+        /* Tooltip para el botón de tema */
+        .theme-tooltip {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            z-index: 1100;
+            display: none;
+            white-space: nowrap;
+            margin-top: 5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        [data-theme="dark"] .theme-tooltip {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #333;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('routes.index') }}">SEMEN</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'routes.index' %}active{% endif %}" 
+                           href="{{ url_for('routes.index') }}">Inicio</a>
+                    </li>
+                    {% if current_user.is_authenticated and current_user.is_admin %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'routes.players' %}active{% endif %}" 
+                           href="{{ url_for('routes.players') }}">Jugadores</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'routes.matches' %}active{% endif %}" 
+                           href="{{ url_for('routes.matches') }}">Partidos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'routes.team_builder' %}active{% endif %}" 
+                           href="{{ url_for('routes.team_builder') }}">Armar Equipos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'routes.venues' %}active{% endif %}" 
+                           href="{{ url_for('routes.venues') }}">Estadios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'routes.schedule_match' %}active{% endif %}" 
+                           href="{{ url_for('routes.schedule_match') }}">Programar Partidos</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav align-items-center">
+                    {% if not current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'routes.register_page' %}active{% endif %}" 
+                           href="{{ url_for('routes.register_page') }}">
+                            <i class="bi bi-calendar-check"></i> Inscripciones
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <span class="nav-link">Bienvenido, {{ current_user.username }}</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('routes.logout') }}">
+                            <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'routes.login' %}active{% endif %}" 
+                           href="{{ url_for('routes.login') }}">
+                            <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    <!-- Botón de Modo Oscuro -->
+                    <li class="nav-item position-relative">
+                        <button id="darkModeToggle" class="nav-darkmode-toggle" aria-label="Cambiar modo oscuro">
+                            <i class="bi bi-sun-fill sun-icon"></i>
+                            <i class="bi bi-moon-stars-fill moon-icon"></i>
+                        </button>
+                        <div id="darkModeTooltip" class="theme-tooltip">
+                            Cambiar a modo claro
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category if category != 'error' else 'danger' }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-3 mt-auto">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2025 Liga de Fútbol. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+    
+    <!-- Script centralizado para manejo de temas -->
+    <script>
+    // ThemeManager - Sistema modular para gestión de temas
+    window.ThemeManager = (function() {
+        // Objeto que almacenará todas las funciones públicas
+        const manager = {};
+        
+        // Inicializa el tema
+        manager.initTheme = function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            manager.updateThemeIcon();
+        };
+        
+        // Obtiene el tema actual
+        manager.getCurrentTheme = function() {
+            return document.documentElement.getAttribute('data-theme') || 'dark';
+        };
+        
+        // Actualiza el icono según el tema actual
+        manager.updateThemeIcon = function() {
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            if (!darkModeToggle) return;
+            
+            const currentTheme = manager.getCurrentTheme();
+            const sunIcon = darkModeToggle.querySelector('.sun-icon');
+            const moonIcon = darkModeToggle.querySelector('.moon-icon');
+            
+            if (sunIcon && moonIcon) {
+                if (currentTheme === 'dark') {
+                    sunIcon.style.display = 'none';
+                    moonIcon.style.display = 'inline-block';
+                } else {
+                    sunIcon.style.display = 'inline-block';
+                    moonIcon.style.display = 'none';
+                }
+            }
+        };
+        
+        // Alterna entre temas claro y oscuro
+        manager.toggleTheme = function() {
+            const currentTheme = manager.getCurrentTheme();
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            // Actualiza el tooltip durante la transición
+            const darkModeTooltip = document.getElementById('darkModeTooltip');
+            if (darkModeTooltip) {
+                darkModeTooltip.textContent = `Cambiando a modo ${newTheme === 'dark' ? 'oscuro' : 'claro'}...`;
+                darkModeTooltip.style.display = 'block';
+            }
+            
+            // Aplica el nuevo tema
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Aplica efecto de transición
+            document.body.classList.add('theme-transition');
+            setTimeout(() => {
+                document.body.classList.add('visible');
+            }, 50);
+            
+            // Actualiza el icono
+            manager.updateThemeIcon();
+            
+            // Actualiza cualquier gráfico si existe
+            if (manager.updateCharts) {
+                manager.updateCharts(newTheme);
+            }
+            
+            // Completa la transición
+            setTimeout(() => {
+                document.body.classList.remove('theme-transition', 'visible');
+                
+                if (darkModeTooltip) {
+                    darkModeTooltip.textContent = `Modo ${newTheme === 'dark' ? 'oscuro' : 'claro'} activado`;
+                    
+                    setTimeout(() => {
+                        darkModeTooltip.style.display = 'none';
+                    }, 2000);
+                }
+            }, 500);
+            
+            // Dispara un evento personalizado para que otros scripts puedan reaccionar
+            document.dispatchEvent(new CustomEvent('themeChanged', { 
+                detail: { theme: newTheme } 
+            }));
+            
+            return newTheme;
+        };
+        
+        // Función para actualizar gráficos de Chart.js al cambiar de tema
+        manager.updateCharts = function(theme) {
+            // Si Chart.js no está cargado, no hacemos nada
+            if (typeof Chart === 'undefined') return;
+            
+            try {
+                // Buscar todos los canvas de gráficos en la página
+                const canvases = document.querySelectorAll('canvas');
+                canvases.forEach(canvas => {
+                    let chart = null;
+                    
+                    // Intentar diferentes formas de obtener el gráfico
+                    if (canvas.__chart__) {
+                        chart = canvas.__chart__;
+                    } else if (window.Chart && window.Chart.getChart) {
+                        try {
+                            chart = Chart.getChart(canvas);
+                        } catch (e) {
+                            // Ignorar errores de Chart.getChart
+                        }
+                    } else if (window[canvas.id]) {
+                        chart = window[canvas.id];
+                    }
+                    
+                    // Si encontramos un gráfico, actualizarlo
+                    if (chart && chart.options) {
+                        const isDark = theme === 'dark';
+                        
+                        // Configuraciones por defecto
+                        const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
+                        const textColor = isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)';
+                        const tooltipBg = isDark ? 'rgba(0, 0, 0, 0.85)' : 'rgba(255, 255, 255, 0.95)';
+                        const tooltipText = isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)';
+                        
+                        // Actualizar el contenedor del gráfico
+                        const chartContainer = canvas.closest('.chart-container');
+                        if (chartContainer) {
+                            chartContainer.style.backgroundColor = isDark ? '#1E1E1E' : '#FFFFFF';
+                        }
+                        
+                        // Actualizar escalas
+                        if (chart.options.scales) {
+                            Object.keys(chart.options.scales).forEach(axisKey => {
+                                const axis = chart.options.scales[axisKey];
+                                if (axis.grid) axis.grid.color = gridColor;
+                                if (axis.ticks) axis.ticks.color = textColor;
+                            });
+                        }
+                        
+                        // Actualizar plugins
+                        if (chart.options.plugins) {
+                            // Leyenda
+                            if (chart.options.plugins.legend && chart.options.plugins.legend.labels) {
+                                chart.options.plugins.legend.labels.color = textColor;
+                            }
+                            
+                            // Tooltip
+                            if (chart.options.plugins.tooltip) {
+                                chart.options.plugins.tooltip.backgroundColor = tooltipBg;
+                                chart.options.plugins.tooltip.titleColor = tooltipText;
+                                chart.options.plugins.tooltip.bodyColor = tooltipText;
+                            }
+                        }
+                        
+                        // Aplicar actualización
+                        chart.update('none');
+                    }
+                });
+            } catch (err) {
+                console.warn('Error al actualizar gráficos:', err);
+            }
+        };
+        
+        // Configura los eventos para el botón de tema
+        manager.setupEvents = function() {
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const darkModeTooltip = document.getElementById('darkModeTooltip');
+            
+            if (darkModeToggle) {
+                // Evento de clic para cambiar el tema
+                darkModeToggle.addEventListener('click', manager.toggleTheme);
+                
+                // Eventos para mostrar/ocultar tooltip
+                if (darkModeTooltip) {
+                    darkModeToggle.addEventListener('mouseenter', () => {
+                        const currentTheme = manager.getCurrentTheme();
+                        darkModeTooltip.textContent = currentTheme === 'dark' 
+                            ? 'Cambiar a modo claro' 
+                            : 'Cambiar a modo oscuro';
+                        darkModeTooltip.style.display = 'block';
+                    });
+                    
+                    darkModeToggle.addEventListener('mouseleave', () => {
+                        darkModeTooltip.style.display = 'none';
+                    });
+                }
+            }
+        };
+        
+        // Inicialización automática cuando se carga el documento
+        document.addEventListener('DOMContentLoaded', function() {
+            manager.initTheme();
+            manager.setupEvents();
+        });
+        
+        return manager;
+    })();
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

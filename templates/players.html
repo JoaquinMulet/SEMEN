@@ -1,0 +1,543 @@
+<!--players.html-->
+
+{% extends 'base.html' %}
+
+{% block title %}Jugadores - SEMEN{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Estilos para la página de jugadores */
+    .stats-card {
+        border: none;
+        border-radius: 16px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease, background-color var(--transition-speed) ease;
+        box-shadow: var(--card-shadow);
+        margin-bottom: 2.5rem;
+        overflow: hidden;
+        background-color: var(--bg-secondary);
+    }
+    
+    .stats-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--btn-shadow);
+    }
+    
+    .stats-card .card-header {
+        background-color: transparent;
+        border-bottom: 1px solid var(--border-color);
+        padding: 1.25rem 1.5rem;
+        transition: border-color var(--transition-speed) ease, background-color var(--transition-speed) ease;
+    }
+    
+    .stats-card .card-header h5 {
+        font-weight: 600;
+        color: var(--text-color);
+        margin: 0;
+        transition: color var(--transition-speed) ease;
+    }
+    
+    .stats-card .card-body {
+        padding: 1.5rem;
+    }
+    
+    .stats-card .card-footer {
+        background-color: transparent;
+        border-top: 1px solid var(--border-color);
+        padding: 0.75rem 1.5rem;
+        transition: border-color var(--transition-speed) ease, background-color var(--transition-speed) ease;
+    }
+    
+    /* Tabla de jugadores */
+    .player-table {
+        margin-bottom: 0;
+        color: var(--text-color);
+        border-color: var(--border-color);
+        transition: color var(--transition-speed) ease,
+                    border-color var(--transition-speed) ease;
+    }
+    
+    .player-table th {
+        font-weight: 600;
+        border-top: none;
+        border-bottom-width: 1px;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+        padding: 1rem;
+    }
+    
+    /* IMPORTANTE: Usar colores directos para la cabecera */
+    .player-table-header {
+        transition: background-color var(--transition-speed) ease;
+    }
+    
+    /* Modo claro - forzar color */
+    html[data-theme="light"] .player-table-header {
+        background-color: #212529 !important;
+    }
+    
+    /* Modo oscuro - forzar color */
+    html[data-theme="dark"] .player-table-header {
+        background-color: #1E1E1E !important;
+    }
+    
+    .player-table-header th {
+        color: rgba(255, 255, 255, 0.9) !important;
+        transition: color var(--transition-speed) ease;
+    }
+    
+    .player-row {
+        border-bottom: 1px solid var(--border-color);
+        transition: all 0.2s ease, border-color var(--transition-speed) ease;
+    }
+    
+    .player-row:last-child {
+        border-bottom: none;
+    }
+    
+    .player-row:hover {
+        background-color: var(--hover-bg) !important;
+    }
+    
+    .player-row td {
+        padding: 1rem;
+        vertical-align: middle;
+        color: var(--text-color);
+        transition: color var(--transition-speed) ease;
+    }
+    
+    /* Posición alineada */
+    .position-cell {
+        width: 50px;
+        text-align: center;
+        vertical-align: middle;
+    }
+    
+    /* Badges adaptables al tema */
+    .badge.bg-light {
+        background-color: var(--bg-secondary) !important;
+        color: var(--text-color) !important;
+        border: 1px solid var(--border-color);
+        transition: background-color var(--transition-speed) ease,
+                    color var(--transition-speed) ease,
+                    border-color var(--transition-speed) ease;
+    }
+    
+    /* Botones de acción */
+    .btn-action {
+        border-radius: 12px;
+        font-weight: 500;
+        font-size: 0.85rem;
+        padding: 0.4rem 0.8rem;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        margin-right: 0.5rem;
+    }
+    
+    .btn-action:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .btn-action i {
+        font-size: 0.85rem;
+        margin-right: 0.25rem;
+    }
+    
+    /* Formulario de agregar jugador */
+    .form-control, .form-select {
+        background-color: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        color: var(--text-color);
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        transition: all 0.2s ease, 
+                   background-color var(--transition-speed) ease,
+                   border-color var(--transition-speed) ease,
+                   color var(--transition-speed) ease;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 76, 175, 80), 0.25);
+        border-color: var(--primary-color);
+        background-color: var(--bg-secondary);
+        color: var(--text-color);
+    }
+    
+    .form-label {
+        font-weight: 500;
+        color: var(--text-color);
+        margin-bottom: 0.5rem;
+        transition: color var(--transition-speed) ease;
+    }
+    
+    /* Botones de acción principales */
+    .btn-primary-action {
+        background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+        border: none;
+        color: white;
+        padding: 0.85rem 1.5rem;
+        font-weight: 600;
+        border-radius: 12px;
+        box-shadow: var(--btn-shadow);
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary-action:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    }
+    
+    /* Ajustes para modo oscuro */
+    [data-theme="dark"] .btn-primary-action {
+        background: linear-gradient(to right, 
+            rgba(92, 219, 149, 0.85), 
+            rgba(72, 169, 230, 0.85));
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    [data-theme="dark"] .btn-primary-action:hover {
+        background: linear-gradient(to right, 
+            rgba(92, 219, 149, 0.95), 
+            rgba(72, 169, 230, 0.95));
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Encabezados de tarjeta */
+    .card-header-styled {
+        background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+        color: white;
+        border-radius: 16px 16px 0 0 !important;
+        padding: 1.25rem;
+    }
+    
+    /* Modales estilizados */
+    .modal-content {
+        border-radius: 16px;
+        border: none;
+        background-color: var(--bg-secondary);
+        color: var(--text-color);
+        transition: background-color var(--transition-speed) ease,
+                   color var(--transition-speed) ease;
+    }
+    
+    .modal-header {
+        border-radius: 16px 16px 0 0;
+        border-bottom: 1px solid var(--border-color);
+        transition: border-color var(--transition-speed) ease;
+    }
+    
+    .modal-footer {
+        border-top: 1px solid var(--border-color);
+        transition: border-color var(--transition-speed) ease;
+    }
+    
+    /* Buscador de jugadores */
+    .search-container {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+    
+    .search-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+        transition: color var(--transition-speed) ease;
+    }
+    
+    .player-search {
+        padding-left: 2.5rem;
+        background-color: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        width: 100%;
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+        color: var(--text-color);
+        transition: background-color var(--transition-speed) ease,
+                   border-color var(--transition-speed) ease,
+                   color var(--transition-speed) ease;
+    }
+    
+    .player-search:focus {
+        box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 76, 175, 80), 0.25);
+        border-color: var(--primary-color);
+        background-color: var(--bg-secondary);
+        color: var(--text-color);
+    }
+    
+    /* Texto muted en el footer de la tarjeta */
+    .text-muted {
+        color: var(--text-muted) !important;
+        transition: color var(--transition-speed) ease;
+    }
+    
+    /* Ajustes específicos para modo oscuro en la tabla */
+    [data-theme="dark"] .player-row:hover {
+        background-color: rgba(255, 255, 255, 0.05) !important;
+    }
+    
+    [data-theme="dark"] .badge.bg-light {
+        background-color: #2c2c2c !important;
+        color: #E0E0E0 !important;
+        border: 1px solid #333333;
+    }
+    
+    [data-theme="dark"] .modal-header.bg-danger {
+        background-color: #721c24 !important;
+    }
+    
+    [data-theme="dark"] .form-text.text-muted {
+        color: #A0A0A0 !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <div class="stats-card animate__animated animate__fadeIn">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5><i class="bi bi-people-fill me-2"></i>Jugadores</h5>
+                <a href="{{ url_for('routes.bulk_update_elo') }}" class="btn btn-outline-primary btn-action">
+                    <i class="bi bi-pencil-square"></i> Actualización Masiva de ELO
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="search-container">
+                    <i class="bi bi-search search-icon"></i>
+                    <input type="text" class="form-control player-search" id="playerTableSearch" placeholder="Buscar jugador...">
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table table-hover player-table">
+                        <thead class="player-table-header">
+                            <tr>
+                                <th class="position-cell">#</th>
+                                <th>Nombre</th>
+                                <th class="text-center">ELO</th>
+                                <th class="text-center">ELO Inicial</th>
+                                <th class="text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for player in players %}
+                            <tr class="player-row">
+                                <td class="position-cell fw-medium">{{ loop.index }}</td>
+                                <td class="fw-medium">{{ player.name }}</td>
+                                <td class="text-center">
+                                    <span class="badge bg-light text-dark fw-medium px-3 py-2 rounded-pill">{{ player.elo }}</span>
+                                </td>
+                                <td class="text-center">{{ player.initial_elo }}</td>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-primary btn-action" 
+                                            data-bs-toggle="modal" data-bs-target="#editPlayerModal"
+                                            data-player-id="{{ player.id }}"
+                                            data-player-name="{{ player.name }}"
+                                            data-player-elo="{{ player.initial_elo }}">
+                                        <i class="bi bi-pencil"></i> Editar
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-action" 
+                                            data-bs-toggle="modal" data-bs-target="#deletePlayerModal"
+                                            data-player-id="{{ player.id }}"
+                                            data-player-name="{{ player.name }}">
+                                        <i class="bi bi-trash"></i> Eliminar
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer text-center py-2">
+                <small class="text-muted">Total de jugadores: {{ players|length }}</small>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="stats-card animate__animated animate__fadeIn">
+            <div class="card-header">
+                <h5><i class="bi bi-person-plus-fill me-2"></i>Agregar Jugador</h5>
+            </div>
+            <div class="card-body">
+                <form action="{{ url_for('routes.add_player') }}" method="post">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="elo" class="form-label">ELO Inicial</label>
+                        <input type="number" class="form-control" id="elo" name="elo" value="1000" required>
+                        <small class="form-text text-muted mt-2">Valor por defecto: 1000</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary-action w-100">
+                        <i class="bi bi-plus-circle me-1"></i> Agregar Jugador
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Player Modal -->
+<div class="modal fade" id="editPlayerModal" tabindex="-1" aria-labelledby="editPlayerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header card-header-styled">
+                <h5 class="modal-title" id="editPlayerModalLabel"><i class="bi bi-pencil-square me-2"></i>Editar Jugador</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editPlayerForm" action="" method="post">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="edit-name" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="edit-name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-elo" class="form-label">ELO Inicial</label>
+                        <input type="number" class="form-control" id="edit-elo" name="elo" required>
+                        <small class="form-text text-muted mt-2">Este valor solo afecta el ELO inicial del jugador. El ELO actual se calcula automáticamente basado en los resultados de los partidos.</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary-action">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Player Modal -->
+<div class="modal fade" id="deletePlayerModal" tabindex="-1" aria-labelledby="deletePlayerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white" style="border-radius: 16px 16px 0 0;">
+                <h5 class="modal-title" id="deletePlayerModalLabel"><i class="bi bi-exclamation-triangle-fill me-2"></i>Eliminar Jugador</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-3">
+                    <i class="bi bi-trash-fill text-danger" style="font-size: 3rem;"></i>
+                </div>
+                <p class="text-center fs-5">¿Estás seguro de que deseas eliminar al jugador <strong><span id="delete-player-name"></span></strong>?</p>
+                <p class="text-danger text-center">Esta acción no se puede deshacer y eliminará todos los registros asociados.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form id="deletePlayerForm" action="" method="post">
+                    <button type="submit" class="btn btn-danger"><i class="bi bi-trash me-1"></i>Eliminar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Aplicar el tema inicial a la tabla
+        applyThemeToTable(ThemeManager.getCurrentTheme());
+        
+        // Escuchar cambios de tema
+        document.addEventListener('themeChanged', function(e) {
+            applyThemeToTable(e.detail.theme);
+        });
+        
+        // Modal de edición
+        const editPlayerModal = document.getElementById('editPlayerModal');
+        if (editPlayerModal) {
+            editPlayerModal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+                const playerId = button.getAttribute('data-player-id');
+                const playerName = button.getAttribute('data-player-name');
+                const playerElo = button.getAttribute('data-player-elo');
+                
+                const modal = this;
+                modal.querySelector('#edit-name').value = playerName;
+                modal.querySelector('#edit-elo').value = playerElo;
+                modal.querySelector('#editPlayerForm').action = `/players/update_elo/${playerId}`;
+            });
+        }
+        
+        // Modal de eliminación
+        const deletePlayerModal = document.getElementById('deletePlayerModal');
+        if (deletePlayerModal) {
+            deletePlayerModal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+                const playerId = button.getAttribute('data-player-id');
+                const playerName = button.getAttribute('data-player-name');
+                
+                const modal = this;
+                modal.querySelector('#delete-player-name').textContent = playerName;
+                modal.querySelector('#deletePlayerForm').action = `/players/delete/${playerId}`;
+            });
+        }
+        
+        // Funcionalidad de búsqueda
+        const playerSearch = document.getElementById('playerTableSearch');
+        if (playerSearch) {
+            playerSearch.addEventListener('input', function() {
+                const searchValue = this.value.toLowerCase();
+                const playerRows = document.querySelectorAll('.player-row');
+                
+                playerRows.forEach(row => {
+                    const playerName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                    if (playerName.includes(searchValue)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+        }
+    });
+
+    // Función para aplicar el tema a la tabla de jugadores
+    function applyThemeToTable(theme) {
+        const tableHeader = document.querySelector('.player-table-header');
+        const badges = document.querySelectorAll('.badge.bg-light');
+        
+        // Forzar los colores de cabecera directamente
+        if (tableHeader) {
+            // Aplicamos color con máxima prioridad
+            if (theme === 'dark') {
+                tableHeader.style.setProperty('background-color', '#1E1E1E', 'important');
+            } else {
+                tableHeader.style.setProperty('background-color', '#212529', 'important');
+            }
+            
+            // Asegurar que los textos de la cabecera sean visibles
+            const headerCells = tableHeader.querySelectorAll('th');
+            headerCells.forEach(cell => {
+                cell.style.setProperty('color', 'rgba(255, 255, 255, 0.9)', 'important');
+            });
+        }
+        
+        // Actualizar los badges según el tema
+        badges.forEach(badge => {
+            if (theme === 'dark') {
+                badge.style.setProperty('background-color', '#2c2c2c', 'important');
+                badge.style.setProperty('color', '#E0E0E0', 'important');
+                badge.style.setProperty('border', '1px solid #333333', 'important');
+            } else {
+                badge.style.setProperty('background-color', '#f8f9fa', 'important');
+                badge.style.setProperty('color', '#212529', 'important');
+                badge.style.setProperty('border', '1px solid #dee2e6', 'important');
+            }
+        });
+    }
+    
+    // Aplicar también después de que todo esté cargado
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            applyThemeToTable(ThemeManager.getCurrentTheme());
+        }, 100);
+    });
+</script>
+{% endblock %}

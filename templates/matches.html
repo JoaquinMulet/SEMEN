@@ -1,0 +1,833 @@
+{% extends 'base.html' %}
+
+{% block title %}Partidos - Liga de Fútbol{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Historial de Partidos</h5>
+                <span class="badge bg-secondary rounded-pill">{{ matches|length if matches else 0 }} partidos</span>
+            </div>
+            <div class="card-body">
+                {% if matches %}
+                    <div class="accordion" id="matchesAccordion">
+                        {% for match in matches %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading{{ match.id }}">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                        data-bs-target="#collapse{{ match.id }}" aria-expanded="false" 
+                                        aria-controls="collapse{{ match.id }}">
+                                    <div class="d-flex justify-content-between align-items-center w-100">
+                                        <span><i class="bi bi-calendar-date me-2"></i><strong>{{ match.date }}</strong></span>
+                                        <span class="badge {% if match.winner == 0 %}bg-secondary{% elif match.winner == 1 %}bg-primary{% elif match.winner == 2 %}bg-info{% endif %}">
+                                            {% if match.winner == 0 %}
+                                                Empate: {{ match.team1_score }} - {{ match.team2_score }}
+                                            {% else %}
+                                                Ganador: Equipo {{ match.winner }} ({{ match.team1_score }} - {{ match.team2_score }})
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                </button>
+                            </h2>
+                            <div id="collapse{{ match.id }}" class="accordion-collapse collapse" 
+                                 aria-labelledby="heading{{ match.id }}" data-bs-parent="#matchesAccordion">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="card team-card">
+                                                <div class="team-header d-flex justify-content-between align-items-center">
+                                                    <span>Equipo 1</span>
+                                                    <span class="badge bg-secondary rounded-pill">{{ match.team1|length }} jugadores</span>
+                                                </div>
+                                                <div class="card-body p-0">
+                                                    <ul class="list-group list-group-flush">
+                                                        {% for player in match.team1 %}
+                                                        <li class="list-group-item player-item">
+                                                            <i class="bi bi-person-fill me-2"></i>{{ player }}
+                                                        </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                                <div class="card-footer text-center 
+                                                    {% if match.winner == 1 %}bg-primary
+                                                    {% elif match.winner == 0 %}bg-secondary
+                                                    {% else %}text-secondary{% endif %}">
+                                                    {% if match.winner == 1 %}
+                                                        <i class="bi bi-trophy-fill me-1"></i>Victoria
+                                                    {% elif match.winner == 0 %}
+                                                        <i class="bi bi-dash-circle-fill me-1"></i>Empate
+                                                    {% else %}
+                                                        <i class="bi bi-x-circle-fill me-1"></i>Derrota
+                                                    {% endif %}
+                                                    ({{ match.team1_score }} - {{ match.team2_score }})
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 d-flex align-items-center justify-content-center">
+                                            <div class="text-center position-relative">
+                                                <div class="match-score">
+                                                    <span class="h3">{{ match.team1_score }}</span>
+                                                    <span class="h2 mx-2">:</span>
+                                                    <span class="h3">{{ match.team2_score }}</span>
+                                                </div>
+                                                <h4 class="mt-2">VS</h4>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="card team-card">
+                                                <div class="team-header d-flex justify-content-between align-items-center">
+                                                    <span>Equipo 2</span>
+                                                    <span class="badge bg-secondary rounded-pill">{{ match.team2|length }} jugadores</span>
+                                                </div>
+                                                <div class="card-body p-0">
+                                                    <ul class="list-group list-group-flush">
+                                                        {% for player in match.team2 %}
+                                                        <li class="list-group-item player-item">
+                                                            <i class="bi bi-person-fill me-2"></i>{{ player }}
+                                                        </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                                <div class="card-footer text-center 
+                                                    {% if match.winner == 2 %}bg-info
+                                                    {% elif match.winner == 0 %}bg-secondary
+                                                    {% else %}text-secondary{% endif %}">
+                                                    {% if match.winner == 2 %}
+                                                        <i class="bi bi-trophy-fill me-1"></i>Victoria
+                                                    {% elif match.winner == 0 %}
+                                                        <i class="bi bi-dash-circle-fill me-1"></i>Empate
+                                                    {% else %}
+                                                        <i class="bi bi-x-circle-fill me-1"></i>Derrota
+                                                    {% endif %}
+                                                    ({{ match.team1_score }} - {{ match.team2_score }})
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-center mt-3">
+                                        <button type="button" class="btn btn-outline-danger btn-sm" 
+                                                data-bs-toggle="modal" data-bs-target="#deleteMatchModal"
+                                                data-match-id="{{ match.id }}"
+                                                data-match-date="{{ match.date }}">
+                                            <i class="bi bi-trash"></i> Eliminar Partido
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-secondary d-flex align-items-center">
+                        <i class="bi bi-info-circle-fill me-2"></i>
+                        <div>No hay partidos registrados. ¡Registra el primero!</div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card sticky-top" style="top: 80px; z-index: 100;">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Registrar Partido</h5>
+                <i class="bi bi-plus-circle-fill"></i>
+            </div>
+            <div class="card-body">
+                <form action="{{ url_for('routes.add_match') }}" method="post" id="addMatchForm">
+                    <div class="mb-3">
+                        <label for="date" class="form-label"><i class="bi bi-calendar me-2"></i>Fecha</label>
+                        <input type="date" class="form-control" id="date" name="date" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label"><i class="bi bi-people-fill me-2"></i>Selecciona Jugadores</label>
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" id="playerSearch" placeholder="Buscar jugador...">
+                            <button class="btn btn-outline-secondary" type="button" id="clearSearch">
+                                <i class="bi bi-x-circle"></i>
+                            </button>
+                        </div>
+                        <div class="player-selection-container p-2 border rounded" style="max-height: 200px; overflow-y: auto;">
+                            {% for player in players|sort(attribute='name') %}
+                            <div class="form-check player-item">
+                                <input class="form-check-input player-checkbox" type="checkbox" 
+                                       id="player-{{ player.id }}" value="{{ player.id }}"
+                                       data-player-name="{{ player.name }}" data-player-elo="{{ player.elo }}">
+                                <label class="form-check-label d-flex justify-content-between align-items-center w-100" for="player-{{ player.id }}">
+                                    <span>{{ player.name }}</span>
+                                    <span class="badge bg-secondary rounded-pill">ELO: {{ player.elo }}</span>
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <button type="button" id="assign-team1" class="btn btn-outline-primary w-100 mb-2 d-flex align-items-center justify-content-center">
+                                <i class="bi bi-arrow-right-circle-fill me-2"></i> Equipo 1
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" id="assign-team2" class="btn btn-outline-info w-100 mb-2 d-flex align-items-center justify-content-center">
+                                <i class="bi bi-arrow-right-circle-fill me-2"></i> Equipo 2
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center team1-header">
+                                    <span>Equipo 1</span>
+                                    <span class="badge bg-secondary rounded-pill team1-count">0</span>
+                                </div>
+                                <div class="card-body p-2">
+                                    <ul id="team1-list" class="list-group team-list">
+                                        <!-- Los jugadores del equipo 1 se mostrarán aquí -->
+                                    </ul>
+                                    <input type="hidden" id="team1-players-input" name="team1_players" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center team2-header">
+                                    <span>Equipo 2</span>
+                                    <span class="badge bg-secondary rounded-pill team2-count">0</span>
+                                </div>
+                                <div class="card-body p-2">
+                                    <ul id="team2-list" class="list-group team-list">
+                                        <!-- Los jugadores del equipo 2 se mostrarán aquí -->
+                                    </ul>
+                                    <input type="hidden" id="team2-players-input" name="team2_players" value="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label"><i class="bi bi-trophy me-2"></i>Equipo Ganador</label>
+                        <div class="card">
+                            <div class="card-body p-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="winning_team" id="team1-win" value="1" required>
+                                    <label class="form-check-label" for="team1-win">
+                                        <i class="bi bi-1-circle me-1"></i>Equipo 1
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="winning_team" id="team2-win" value="2">
+                                    <label class="form-check-label" for="team2-win">
+                                        <i class="bi bi-2-circle me-1"></i>Equipo 2
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="winning_team" id="draw" value="0">
+                                    <label class="form-check-label" for="draw">
+                                        <i class="bi bi-dash-circle me-1"></i>Empate
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label"><i class="bi bi-bullseye me-2"></i>Goles</label>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="input-group">
+                                    <span class="input-group-text team1-header">E1</span>
+                                    <input type="number" class="form-control" id="team1-score" name="team1_score" value="0" min="0" max="99">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="input-group">
+                                    <span class="input-group-text team2-header">E2</span>
+                                    <input type="number" class="form-control" id="team2-score" name="team2_score" value="0" min="0" max="99">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center">
+                        <i class="bi bi-plus-circle-fill me-2"></i> Registrar Partido
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Match Modal -->
+<div class="modal fade" id="deleteMatchModal" tabindex="-1" aria-labelledby="deleteMatchModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteMatchModalLabel">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>Eliminar Partido
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-secondary">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <span>Esta acción no se puede deshacer.</span>
+                </div>
+                <p>¿Estás seguro de que deseas eliminar el partido del <strong><span id="delete-match-date"></span></strong>?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle me-1"></i>Cancelar
+                </button>
+                <form id="deleteMatchForm" action="" method="post">
+                    <button type="submit" class="btn btn-outline-secondary">
+                        <i class="bi bi-trash me-1"></i>Eliminar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Variables para tema claro y oscuro */
+    :root {
+        /* Transiciones */
+        --transition-normal: all 0.3s ease;
+        --transition-fast: all 0.2s ease;
+    }
+    
+    [data-theme="dark"] {
+        /* Colores base y neutrales */
+        --neutral-50: #f9fafb;
+        --neutral-100: #f3f4f6;
+        --neutral-200: #e5e7eb;
+        --neutral-300: #d1d5db;
+        --neutral-400: #9ca3af;
+        --neutral-500: #6b7280;
+        --neutral-600: #4b5563;
+        --neutral-700: #374151;
+        --neutral-800: #1f2937;
+        --neutral-900: #111827;
+        
+        /* Paleta de colores muted para ambiente profesional */
+        --primary-soft: #477aad;
+        --primary-muted: #375a7f;
+        --secondary-soft: #5a8ec9;
+        --secondary-muted: #446e9b;
+        
+        /* Superficies */
+        --surface-0: #121212;
+        --surface-1: #1e1e1e;
+        --surface-2: #222;
+        --surface-3: #282828;
+        --surface-4: #2c2c2c;
+        
+        /* Bordes y divisores */
+        --border-light: rgba(255, 255, 255, 0.1);
+        --border-medium: rgba(255, 255, 255, 0.15);
+        --border-strong: rgba(255, 255, 255, 0.2);
+        
+        /* Textos */
+        --text-primary: rgba(255, 255, 255, 0.87);
+        --text-secondary: rgba(255, 255, 255, 0.6);
+        --text-muted: rgba(255, 255, 255, 0.4);
+        
+        /* Estados */
+        --hover-overlay: rgba(255, 255, 255, 0.05);
+        --focus-overlay: rgba(255, 255, 255, 0.1);
+    }
+    
+    [data-theme="light"] {
+        /* Colores base y neutrales */
+        --neutral-50: #f9fafb;
+        --neutral-100: #f3f4f6;
+        --neutral-200: #e5e7eb;
+        --neutral-300: #d1d5db;
+        --neutral-400: #9ca3af;
+        --neutral-500: #6b7280;
+        --neutral-600: #4b5563;
+        --neutral-700: #374151;
+        --neutral-800: #1f2937;
+        --neutral-900: #111827;
+        
+        /* Paleta de colores muted para ambiente profesional */
+        --primary-soft: #375a7f;
+        --primary-muted: #264566;
+        --secondary-soft: #446e9b;
+        --secondary-muted: #30557b;
+        
+        /* Superficies */
+        --surface-0: #ffffff;
+        --surface-1: #f8f9fa;
+        --surface-2: #f3f4f6;
+        --surface-3: #e9ecef;
+        --surface-4: #dee2e6;
+        
+        /* Bordes y divisores */
+        --border-light: rgba(0, 0, 0, 0.05);
+        --border-medium: rgba(0, 0, 0, 0.1);
+        --border-strong: rgba(0, 0, 0, 0.15);
+        
+        /* Textos */
+        --text-primary: rgba(0, 0, 0, 0.87);
+        --text-secondary: rgba(0, 0, 0, 0.6);
+        --text-muted: rgba(0, 0, 0, 0.4);
+        
+        /* Estados */
+        --hover-overlay: rgba(0, 0, 0, 0.05);
+        --focus-overlay: rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Estilos de componentes */
+    .card {
+        transition: var(--transition-normal);
+        border-width: 1px;
+        background-color: var(--surface-1);
+        border-color: var(--border-light);
+    }
+    
+    .card-header {
+        background-color: var(--surface-2);
+        color: var(--text-primary);
+        transition: var(--transition-normal);
+    }
+    
+    .team-header {
+        transition: var(--transition-normal);
+    }
+    
+    .team1-header {
+        border-left: 4px solid var(--primary-soft);
+    }
+    
+    .team2-header {
+        border-left: 4px solid var(--secondary-soft);
+    }
+    
+    .accordion-button {
+        background-color: var(--surface-1);
+        color: var(--text-primary);
+        transition: var(--transition-normal);
+    }
+    
+    .accordion-button:not(.collapsed) {
+        background-color: var(--surface-2);
+    }
+    
+    .accordion-button::after {
+        color: var(--text-primary);
+    }
+    
+    .match-score {
+        color: var(--text-primary);
+        transition: var(--transition-normal);
+    }
+    
+    .player-selection-container {
+        border-color: var(--border-light) !important;
+        background-color: var(--surface-1);
+        transition: var(--transition-normal);
+    }
+    
+    .form-control, 
+    .input-group-text {
+        background-color: var(--surface-1);
+        border-color: var(--border-light);
+        color: var(--text-primary);
+        transition: var(--transition-normal);
+    }
+    
+    .form-control:focus {
+        background-color: var(--surface-0);
+        border-color: var(--border-medium);
+        box-shadow: 0 0 0 0.25rem var(--focus-overlay);
+    }
+    
+    .player-item {
+        transition: var(--transition-fast);
+    }
+    
+    .player-item:hover {
+        background-color: var(--hover-overlay);
+    }
+    
+    .team-list {
+        min-height: 50px;
+        transition: var(--transition-normal);
+        background-color: var(--surface-1);
+    }
+    
+    .modal-content {
+        background-color: var(--surface-1);
+        color: var(--text-primary);
+        transition: var(--transition-normal);
+    }
+    
+    .modal-header {
+        border-bottom-color: var(--border-light);
+    }
+    
+    .modal-footer {
+        border-top-color: var(--border-light);
+    }
+    
+    .alert-secondary {
+        background-color: var(--surface-2);
+        color: var(--text-primary);
+        border-color: var(--border-light);
+        transition: var(--transition-normal);
+    }
+    
+    .badge {
+        transition: var(--transition-normal);
+    }
+    
+    .badge.bg-secondary {
+        background-color: var(--surface-3) !important;
+        color: var(--text-primary);
+    }
+    
+    .btn-outline-secondary {
+        border-color: var(--border-strong);
+        color: var(--text-primary);
+        transition: var(--transition-normal);
+    }
+    
+    .btn-outline-secondary:hover {
+        background-color: var(--hover-overlay);
+        border-color: var(--border-strong);
+        color: var(--text-primary);
+    }
+    
+    .btn-outline-primary {
+        border-color: var(--primary-soft);
+        color: var(--primary-soft);
+    }
+    
+    .btn-outline-primary:hover {
+        background-color: rgba(var(--primary-soft), 0.1);
+        color: var(--primary-soft);
+    }
+    
+    .btn-outline-info {
+        border-color: var(--secondary-soft);
+        color: var(--secondary-soft);
+    }
+    
+    .btn-outline-info:hover {
+        background-color: rgba(var(--secondary-soft), 0.1);
+        color: var(--secondary-soft);
+    }
+    
+    /* Ajustes específicos para elementos anidados */
+    .list-group-item {
+        background-color: var(--surface-1);
+        border-color: var(--border-light);
+        color: var(--text-primary);
+        transition: var(--transition-normal);
+    }
+    
+    /* Ajustes para acordeón */
+    .accordion-item {
+        background-color: var(--surface-1);
+        border-color: var(--border-light);
+    }
+    
+    .accordion-collapse {
+        background-color: var(--surface-1);
+    }
+    
+    /* Mejoras para formulario */
+    .form-check-input {
+        background-color: var(--surface-2);
+        border-color: var(--border-medium);
+    }
+    
+    .form-check-input:checked {
+        background-color: var(--primary-soft);
+        border-color: var(--primary-soft);
+    }
+    
+    /* Tooltips y elementos flotantes */
+    .tooltip {
+        --bs-tooltip-bg: var(--surface-4);
+        --bs-tooltip-color: var(--text-primary);
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set today's date as default
+        const dateElement = document.getElementById('date');
+        if (dateElement) {
+            dateElement.valueAsDate = new Date();
+        }
+        
+        // Score and winner synchronization
+        const team1ScoreInput = document.getElementById('team1-score');
+        const team2ScoreInput = document.getElementById('team2-score');
+        const team1WinRadio = document.getElementById('team1-win');
+        const team2WinRadio = document.getElementById('team2-win');
+        const drawRadio = document.getElementById('draw');
+        
+        if (team1ScoreInput && team2ScoreInput && team1WinRadio && team2WinRadio && drawRadio) {
+            function updateWinnerBasedOnScore() {
+                const team1Score = parseInt(team1ScoreInput.value) || 0;
+                const team2Score = parseInt(team2ScoreInput.value) || 0;
+                
+                if (team1Score > team2Score) {
+                    team1WinRadio.checked = true;
+                } else if (team2Score > team1Score) {
+                    team2WinRadio.checked = true;
+                } else {
+                    drawRadio.checked = true;
+                }
+            }
+            
+            team1ScoreInput.addEventListener('change', updateWinnerBasedOnScore);
+            team2ScoreInput.addEventListener('change', updateWinnerBasedOnScore);
+            
+            // Validate form before submission
+            const addMatchForm = document.getElementById('addMatchForm');
+            if (addMatchForm) {
+                addMatchForm.addEventListener('submit', function(event) {
+                    const team1Players = document.getElementById('team1-players-input').value;
+                    const team2Players = document.getElementById('team2-players-input').value;
+                    
+                    if (!team1Players || !team2Players) {
+                        event.preventDefault();
+                        alert('Por favor asigna jugadores a ambos equipos');
+                        return;
+                    }
+                    
+                    const team1Score = parseInt(team1ScoreInput.value) || 0;
+                    const team2Score = parseInt(team2ScoreInput.value) || 0;
+                    const selectedWinner = document.querySelector('input[name="winning_team"]:checked').value;
+                    
+                    let isValid = true;
+                    let errorMessage = '';
+                    
+                    if (selectedWinner === '1' && team1Score <= team2Score) {
+                        errorMessage = 'Si el Equipo 1 gana, debe tener más goles que el Equipo 2';
+                        isValid = false;
+                    } else if (selectedWinner === '2' && team2Score <= team1Score) {
+                        errorMessage = 'Si el Equipo 2 gana, debe tener más goles que el Equipo 1';
+                        isValid = false;
+                    } else if (selectedWinner === '0' && team1Score !== team2Score) {
+                        errorMessage = 'En caso de empate, ambos equipos deben tener el mismo número de goles';
+                        isValid = false;
+                    }
+                    
+                    if (!isValid) {
+                        event.preventDefault();
+                        alert(errorMessage);
+                    }
+                });
+            }
+        }
+        
+        // Team assignment functionality
+        const playerCheckboxes = document.querySelectorAll('.player-checkbox');
+        const assignTeam1Button = document.getElementById('assign-team1');
+        const assignTeam2Button = document.getElementById('assign-team2');
+        const team1List = document.getElementById('team1-list');
+        const team2List = document.getElementById('team2-list');
+        const team1PlayersInput = document.getElementById('team1-players-input');
+        const team2PlayersInput = document.getElementById('team2-players-input');
+        const team1CountBadge = document.querySelector('.team1-count');
+        const team2CountBadge = document.querySelector('.team2-count');
+        
+        if (playerCheckboxes.length && assignTeam1Button && assignTeam2Button && team1List && team2List && team1PlayersInput && team2PlayersInput) {
+            // Function to update hidden inputs with player IDs
+            function updateTeamInputs() {
+                const team1Players = Array.from(team1List.querySelectorAll('li')).map(li => li.dataset.playerId);
+                const team2Players = Array.from(team2List.querySelectorAll('li')).map(li => li.dataset.playerId);
+                
+                team1PlayersInput.value = team1Players.join(',');
+                team2PlayersInput.value = team2Players.join(',');
+                
+                // Update team count badges
+                if (team1CountBadge) team1CountBadge.textContent = team1Players.length;
+                if (team2CountBadge) team2CountBadge.textContent = team2Players.length;
+            }
+            
+            // Function to add selected players to a team
+            function addToTeam(teamList, teamInput) {
+                const selectedPlayers = Array.from(playerCheckboxes).filter(cb => cb.checked);
+                
+                if (selectedPlayers.length === 0) {
+                    alert('Por favor selecciona al menos un jugador');
+                    return;
+                }
+                
+                selectedPlayers.forEach(checkbox => {
+                    const playerId = checkbox.value;
+                    const playerName = checkbox.dataset.playerName;
+                    const playerElo = checkbox.dataset.playerElo;
+                    
+                    // Check if player is already in a team
+                    const team1HasPlayer = Array.from(team1List.querySelectorAll('li')).some(li => li.dataset.playerId === playerId);
+                    const team2HasPlayer = Array.from(team2List.querySelectorAll('li')).some(li => li.dataset.playerId === playerId);
+                    
+                    if (!team1HasPlayer && !team2HasPlayer) {
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                        li.dataset.playerId = playerId;
+                        
+                        li.innerHTML = `
+                            <div>
+                                <i class="bi bi-person-fill me-1"></i>
+                                <span>${playerName}</span>
+                            </div>
+                            <div>
+                                <span class="badge bg-secondary rounded-pill me-2">ELO: ${playerElo}</span>
+                                <button type="button" class="btn btn-sm btn-danger remove-player" title="Quitar jugador">
+                                    <i class="bi bi-x"></i>
+                                </button>
+                            </div>
+                        `;
+                        
+                        teamList.appendChild(li);
+                        checkbox.checked = false;
+                    }
+                });
+                
+                // Update hidden inputs
+                updateTeamInputs();
+            }
+            
+            // Add to Team 1 button
+            assignTeam1Button.addEventListener('click', function() {
+                addToTeam(team1List, team1PlayersInput);
+            });
+            
+            // Add to Team 2 button
+            assignTeam2Button.addEventListener('click', function() {
+                addToTeam(team2List, team2PlayersInput);
+            });
+            
+            // Remove player from team when clicking the remove button
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('remove-player') || e.target.parentElement.classList.contains('remove-player')) {
+                    const button = e.target.classList.contains('remove-player') ? e.target : e.target.parentElement;
+                    const listItem = button.closest('li');
+                    listItem.remove();
+                    
+                    // Update hidden inputs
+                    updateTeamInputs();
+                }
+            });
+            
+            // Player search functionality
+            const playerSearch = document.getElementById('playerSearch');
+            const clearSearchBtn = document.getElementById('clearSearch');
+            
+            if (playerSearch && clearSearchBtn) {
+                playerSearch.addEventListener('input', function() {
+                    const searchText = this.value.toLowerCase();
+                    playerCheckboxes.forEach(checkbox => {
+                        const playerName = checkbox.dataset.playerName.toLowerCase();
+                        const playerItem = checkbox.closest('.player-item');
+                        
+                        if (playerName.includes(searchText)) {
+                            playerItem.style.display = '';
+                        } else {
+                            playerItem.style.display = 'none';
+                        }
+                    });
+                });
+                
+                clearSearchBtn.addEventListener('click', function() {
+                    playerSearch.value = '';
+                    playerCheckboxes.forEach(checkbox => {
+                        const playerItem = checkbox.closest('.player-item');
+                        playerItem.style.display = '';
+                    });
+                });
+            }
+        }
+        
+        // Delete Match Modal
+        const deleteMatchModal = document.getElementById('deleteMatchModal');
+        if (deleteMatchModal) {
+            deleteMatchModal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+                const matchId = button.getAttribute('data-match-id');
+                const matchDate = button.getAttribute('data-match-date');
+                
+                const modal = this;
+                modal.querySelector('#delete-match-date').textContent = matchDate;
+                modal.querySelector('#deleteMatchForm').action = "/matches/delete/" + matchId;
+            });
+        }
+        
+        // Handle theme changes for custom components
+        document.addEventListener('themeChanged', function(e) {
+            const theme = e.detail.theme;
+            
+            // Aplicar cambios específicos a elementos personalizados basados en el tema
+            const isDark = theme === 'dark';
+            
+            // Actualizar colores de los equipos cuando se cambia el tema
+            const team1Headers = document.querySelectorAll('.team1-header');
+            const team2Headers = document.querySelectorAll('.team2-header');
+            
+            team1Headers.forEach(header => {
+                if (header.classList.contains('input-group-text')) {
+                    header.style.backgroundColor = isDark ? '#2c2c2c' : '#f5f5f5';
+                    header.style.color = isDark ? '#e0e0e0' : '#333';
+                    header.style.borderColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.125)';
+                    header.style.borderLeftColor = isDark ? '#477aad' : '#375a7f';
+                }
+            });
+            
+            team2Headers.forEach(header => {
+                if (header.classList.contains('input-group-text')) {
+                    header.style.backgroundColor = isDark ? '#2c2c2c' : '#f5f5f5';
+                    header.style.color = isDark ? '#e0e0e0' : '#333';
+                    header.style.borderColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.125)';
+                    header.style.borderLeftColor = isDark ? '#5a8ec9' : '#446e9b';
+                }
+            });
+            
+            // Actualizar estilos del formulario
+            const formControls = document.querySelectorAll('.form-control');
+            formControls.forEach(input => {
+                input.style.backgroundColor = isDark ? 'var(--bg-secondary)' : '';
+                input.style.borderColor = isDark ? 'rgba(255, 255, 255, 0.1)' : '';
+                input.style.color = isDark ? 'var(--text-color)' : '';
+            });
+            
+            // Actualizar estilos de las tarjetas de equipos
+            const teamLists = document.querySelectorAll('.team-list');
+            teamLists.forEach(list => {
+                list.style.backgroundColor = isDark ? 'var(--bg-secondary)' : '';
+                list.style.borderColor = isDark ? 'rgba(255, 255, 255, 0.1)' : '';
+            });
+            
+            // Actualizar badges
+            const badges = document.querySelectorAll('.badge.bg-secondary');
+            badges.forEach(badge => {
+                badge.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.1)' : '';
+                badge.style.color = isDark ? 'var(--text-color)' : '';
+            });
+            
+            // Actualizar estilos del acordeón
+            const accordionButtons = document.querySelectorAll('.accordion-button');
+            accordionButtons.forEach(button => {
+                button.style.backgroundColor = isDark ? 'var(--bg-secondary)' : '';
+                button.style.color = isDark ? 'var(--text-color)' : '';
+            });
+        });
+    });
+</script>
+{% endblock %}

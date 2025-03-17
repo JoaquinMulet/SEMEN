@@ -1,0 +1,630 @@
+<!-- index.html -->
+{% extends 'base.html' %}
+
+{% block title %}Inicio - SEMEN{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+<style>
+    /* Estilos específicos para la página de inicio */
+    /* Mejoras en el Banner Principal */
+    .hero-section {
+        background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.4) 90%), 
+                    url('static/images/index.webp');
+        background-size: cover;
+        background-position: center;
+        color: #fff;
+        padding: 8rem 0;
+        margin: 2rem auto 3rem;
+        position: relative;
+        overflow: hidden;
+        border-radius: 15px;
+        box-shadow: var(--card-shadow);
+        max-width: 95%;
+        transition: box-shadow var(--transition-speed) ease;
+    }
+    
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        border-radius: 15px;
+    }
+    
+    .hero-content {
+        position: relative;
+        z-index: 2;
+        padding-left: 0;
+        text-align: center;
+    }
+    
+    .hero-title {
+        font-weight: 800;
+        letter-spacing: -1px;
+        margin-bottom: 1.5rem;
+        position: relative;
+        display: inline-block;
+        font-size: 3.5rem;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    
+    .hero-title::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        width: 100px;
+        height: 4px;
+        background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+        border-radius: 2px;
+        transition: background var(--transition-speed) ease;
+    }
+    
+    .hero-subtitle {
+        font-weight: 300;
+        color: rgba(255, 255, 255, 0.95);
+        max-width: 700px;
+        margin: 0 auto 2.5rem;
+        font-size: 1.25rem;
+        line-height: 1.6;
+        text-shadow: 0 1px 5px rgba(0,0,0,0.2);
+    }
+    
+    .hero-cta {
+        background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+        border: none;
+        color: white;
+        padding: 0.85rem 2.5rem;
+        transition: all var(--transition-speed) ease;
+        font-weight: 600;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+        box-shadow: var(--btn-shadow);
+        border-radius: 30px;
+        font-size: 1rem;
+    }
+    
+    .hero-cta::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to right, var(--secondary-color), var(--primary-color));
+        transition: all 0.4s ease-in-out;
+        z-index: -1;
+        border-radius: 30px;
+    }
+    
+    .hero-cta:hover::before {
+        left: 0;
+    }
+    
+    .hero-cta:hover {
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        transform: translateY(-2px);
+    }
+    
+    .hero-badge {
+        position: absolute;
+        top: 25px;
+        right: 30px;
+        background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+        padding: 10px 20px;
+        border-radius: 30px;
+        color: white;
+        font-weight: 600;
+        box-shadow: var(--btn-shadow);
+        border: 1px solid rgba(255,255,255,0.3);
+        z-index: 10;
+        letter-spacing: 0.5px;
+        transition: background var(--transition-speed) ease, 
+                    box-shadow var(--transition-speed) ease;
+    }
+    
+    /* Mejoras en la tarjeta de estadísticas */
+    .stats-card {
+        border: none;
+        border-radius: 16px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: var(--card-shadow);
+        margin-bottom: 2.5rem;
+        overflow: hidden;
+        background-color: var(--bg-secondary);
+    }
+    
+    .stats-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--btn-shadow);
+    }
+    
+    .stats-card .card-header {
+        background-color: transparent;
+        border-bottom: 1px solid var(--border-color);
+        padding: 1.25rem 1.5rem;
+        transition: border-color var(--transition-speed) ease;
+    }
+    
+    .stats-card .card-header h5 {
+        font-weight: 600;
+        color: var(--text-color);
+        margin: 0;
+        transition: color var(--transition-speed) ease;
+    }
+    
+    .stats-card .card-body {
+        padding: 1.5rem;
+    }
+    
+    /* Contenedor de gráficos */
+    .chart-container {
+        position: relative;
+        height: 400px;
+        margin-bottom: 1.5rem;
+        background-color: var(--bg-secondary);
+        transition: background-color var(--transition-speed) ease;
+    }
+    
+    /* Mejoras en la tabla de rankings */
+    .stats-card .table {
+        margin-bottom: 0;
+        color: var(--text-color);
+    }
+    
+    .stats-card .table th {
+        font-weight: 600;
+        border-top: none;
+        border-bottom-width: 1px;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+        color: var(--text-muted);
+        padding: 1rem;
+    }
+    
+    .stats-card .table thead {
+        background-color: var(--bg-secondary);
+    }
+    
+    [data-theme="dark"] .stats-card .table thead {
+        background-color: var(--nav-bg);
+    }
+    
+    .player-row {
+        border-bottom: 1px solid var(--border-color);
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
+    
+    .player-row:last-child {
+        border-bottom: none;
+    }
+    
+    .player-row:hover {
+        background-color: transparent !important;
+    }
+    
+    .player-row td {
+        padding: 1rem;
+        vertical-align: middle;
+    }
+    
+    /* Estilos para el nombre del jugador */
+    .player-row td span.fw-medium {
+        font-weight: 500;
+    }
+    
+    /* Alineación vertical de los indicadores de posición */
+    .position-cell {
+        width: 50px;
+        text-align: center;
+        vertical-align: middle;
+    }
+    
+    .position-ranking {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: white;
+        margin: 0 auto;
+    }
+    
+    .position-1 {
+        background: linear-gradient(135deg, #FFD700, #FFA500);
+        box-shadow: 0 3px 6px rgba(255, 215, 0, 0.3);
+    }
+    
+    .position-2 {
+        background: linear-gradient(135deg, #C0C0C0, #A9A9A9);
+        box-shadow: 0 3px 6px rgba(192, 192, 192, 0.3);
+    }
+    
+    .position-3 {
+        background: linear-gradient(135deg, #CD7F32, #8B4513);
+        box-shadow: 0 3px 6px rgba(205, 127, 50, 0.3);
+    }
+    
+    .badge-elo {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        font-weight: 600;
+        padding: 0.4rem 0.7rem;
+        border-radius: 30px;
+        font-size: 0.85rem;
+        min-width: 70px;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        transition: all 0.2s ease;
+        border: 1px solid var(--border-color);
+    }
+    
+    /* Alineación de flechas y puntajes en la tabla */
+    .elo-column {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .elo-change {
+        display: flex;
+        align-items: center;
+        font-size: 0.75rem;
+        font-weight: 600;
+        min-width: 35px;
+        justify-content: flex-start;
+    }
+    
+    .elo-change-up {
+        color: var(--win-text);
+    }
+    
+    .elo-change-down {
+        color: var(--loss-text);
+    }
+    
+    .elo-change-none {
+        color: var(--text-muted);
+    }
+    
+    .elo-triangle-up {
+        width: 0;
+        height: 0;
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-bottom: 6px solid var(--win-text);
+        margin-right: 2px;
+    }
+    
+    .elo-triangle-down {
+        width: 0;
+        height: 0;
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-top: 6px solid var(--loss-text);
+        margin-right: 2px;
+    }
+    
+    /* Barra de porcentaje de victorias */
+    .win-rate-container {
+        height: 8px;
+        background-color: var(--border-color);
+        border-radius: 4px;
+        overflow: hidden;
+        width: 100%;
+        max-width: 120px;
+    }
+    
+    .win-rate-bar {
+        height: 100%;
+        border-radius: 4px;
+        background: linear-gradient(90deg, 
+            var(--primary-color) var(--win-rate), 
+            transparent var(--win-rate));
+    }
+    
+    /* Estilo para el pie de tabla */
+    .card-footer {
+        background-color: transparent;
+        border-top: 1px solid var(--border-color);
+        color: var(--text-muted);
+    }
+    
+    /* Estilos para el campo de búsqueda */
+    #playerSearch {
+        background-color: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        color: var(--text-color);
+        transition: all 0.2s ease;
+    }
+    
+    #playerSearch:focus {
+        box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 76, 175, 80), 0.25);
+        border-color: var(--primary-color);
+    }
+    
+    .input-group-text {
+        border-radius: 20px 0 0 20px;
+        border: 1px solid var(--border-color);
+        background-color: var(--bg-secondary);
+        color: var(--text-muted);
+    }
+    
+    .btn-group .btn {
+        border-radius: 0;
+        font-weight: 400;
+    }
+    
+    /* Ajuste de colores para modo oscuro */
+    [data-theme="dark"] .win-text {
+        color: var(--win-text) !important;
+    }
+    
+    [data-theme="dark"] .loss-text {
+        color: var(--loss-text) !important;
+    }
+    
+    [data-theme="dark"] .table-hover tbody tr:hover {
+        background-color: transparent !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="container">
+    <section class="hero-section animate__animated animate__fadeIn">
+        <div class="hero-badge animate__animated animate__fadeInDown animate__delay-1s">Temporada 2025</div>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 hero-content">
+                    <h1 class="display-3 hero-title animate__animated animate__fadeInUp">Armagedong Cup</h1>
+                    <p class="hero-subtitle animate__animated animate__fadeInUp animate__delay-1s">Sistema de Equipos con Medición y Evaluación de Niveles (SEMEN)</p>
+                    {% if not current_user.is_authenticated %}
+                    <a href="{{ url_for('routes.register_page') }}" class="btn hero-cta animate__animated animate__fadeInUp animate__delay-2s">
+                        <i class="bi bi-calendar-check me-2"></i>Inscribirse a partidos
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="container">
+    <!-- ELO Evolution Chart -->
+    <div class="stats-card animate__animated animate__fadeInUp">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5><i class="bi bi-graph-up me-2"></i>Evolución de ELO</h5>
+            <div class="btn-group">
+                <button class="btn btn-sm btn-light" id="showTop5">Top 5</button>
+                <button class="btn btn-sm btn-outline-light" id="showTop10">Top 10</button>
+                <button class="btn btn-sm btn-outline-light" id="customSelection">Personalizado</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="chart-container">
+                <canvas id="eloChart"></canvas>
+            </div>
+            <div id="playerSelectionContainer" class="mt-3" style="display: none;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="playerSelection" class="form-label text-muted">Seleccionar jugadores:</label>
+                            <select class="form-select" id="playerSelection" multiple>
+                                {% for player in players %}
+                                <option value="{{ player.id }}">{{ player.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button class="btn btn-outline-secondary btn-sm mt-2" id="updateChart">Actualizar gráfico</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Player Rankings - Versión Mejorada -->
+    <div class="stats-card animate__animated animate__fadeInUp">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5><i class="bi bi-trophy me-2"></i>Tabla de Posiciones</h5>
+            <div class="input-group input-group-sm" style="width: 200px;">
+                <span class="input-group-text bg-transparent border-end-0">
+                    <i class="bi bi-search text-muted"></i>
+                </span>
+                <input type="text" class="form-control border-start-0" id="playerSearch" placeholder="Buscar jugador...">
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th class="position-cell">#</th>
+                            <th>Jugador</th>
+                            <th class="text-center">ELO</th>
+                            <th class="text-center">PJ</th>
+                            <th class="text-center">PG</th>
+                            <th class="text-center">PP</th>
+                            <th class="text-center">PE</th>
+                            <th class="text-center">% Victoria</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for player in players %}
+                        <tr class="player-row" data-player-id="{{ player.id }}">
+                            <td class="position-cell">
+                                {% if loop.index <= 3 %}
+                                    <div class="position-ranking position-{{ loop.index }}">{{ loop.index }}</div>
+                                {% else %}
+                                    {{ loop.index }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="fw-medium">{{ player.name }}</span>
+                            </td>
+                            <td>
+                                <div class="elo-column">
+                                    <span class="badge badge-elo">{{ player.elo }}</span>
+                                    {% if player.elo_change > 0 %}
+                                    <span class="elo-change elo-change-up"><div class="elo-triangle-up"></div>{{ player.elo_change }}</span>
+                                    {% elif player.elo_change < 0 %}
+                                    <span class="elo-change elo-change-down"><div class="elo-triangle-down"></div>{{ player.elo_change|abs }}</span>
+                                    {% else %}
+                                    <span class="elo-change elo-change-none"></span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td class="text-center fw-medium">{{ player.matches_played }}</td>
+                            <td class="text-center fw-medium win-text">{{ player.wins }}</td>
+                            <td class="text-center fw-medium loss-text">{{ player.matches_played - player.wins - player.draws }}</td>
+                            <td class="text-center fw-medium text-warning">{{ player.draws }}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <span class="me-2 fw-medium">{{ player.win_rate }}%</span>
+                                    <div class="flex-grow-1 win-rate-container">
+                                        <div class="win-rate-bar" style="--win-rate: {{ player.win_rate }}%"></div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer text-center py-2">
+            <small>Última actualización: {{ last_update|default('Hoy') }}</small>
+        </div>
+    </div>
+    
+    {% if not current_user.is_authenticated %}
+    <div class="stats-card animate__animated animate__fadeInUp text-center py-4">
+        <p class="text-muted mb-3">Para acceder a las funciones de administración, inicie sesión como administrador</p>
+        <a href="{{ url_for('routes.login') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- jQuery (opcional, si lo estás usando) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Locales para date-fns -->
+<script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/locale/es/index.js"></script>
+<!-- Chart.js para los gráficos -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Adaptador para fechas en Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+<!-- Tu script personalizado -->
+<script src="{{ url_for('static', filename='js/stats.js') }}"></script>
+
+<script>
+// Integración con el sistema de temas
+document.addEventListener('DOMContentLoaded', function() {
+    // Verifica si el gráfico existe y registra un observer para actualizarlo cuando cambie el tema
+    document.addEventListener('themeChanged', function(e) {
+        if (window.ThemeManager && window.ThemeManager.updateCharts) {
+            window.ThemeManager.updateCharts(e.detail.theme);
+        }
+        
+        // Actualiza clases específicas para el tema cuando cambia
+        const currentTheme = e.detail.theme;
+        const winElements = document.querySelectorAll('.win-text');
+        const lossElements = document.querySelectorAll('.loss-text');
+        
+        if (currentTheme === 'dark') {
+            winElements.forEach(el => {
+                el.classList.remove('text-success');
+                el.style.color = 'var(--win-text)';
+            });
+            
+            lossElements.forEach(el => {
+                el.classList.remove('text-danger');
+                el.style.color = 'var(--loss-text)';
+            });
+        } else {
+            winElements.forEach(el => {
+                el.classList.add('text-success');
+                el.style.color = '';
+            });
+            
+            lossElements.forEach(el => {
+                el.classList.add('text-danger');
+                el.style.color = '';
+            });
+        }
+    });
+    
+    // Intenta capturar el gráfico ELO una vez que se crea
+    const captureEloChart = function() {
+        const checkInterval = setInterval(function() {
+            const chartCanvas = document.getElementById('eloChart');
+            if (chartCanvas && chartCanvas.__chart__) {
+                window.eloChart = chartCanvas.__chart__;
+                clearInterval(checkInterval);
+                
+                // Aplica el tema actual al gráfico
+                if (window.ThemeManager) {
+                    const currentTheme = window.ThemeManager.getCurrentTheme();
+                    window.ThemeManager.updateCharts(currentTheme);
+                }
+            }
+        }, 500);
+        
+        setTimeout(() => clearInterval(checkInterval), 10000);
+    };
+    
+    captureEloChart();
+    
+    // Funcionalidad de búsqueda de jugadores
+    const playerSearch = document.getElementById('playerSearch');
+    if (playerSearch) {
+        playerSearch.addEventListener('input', function() {
+            const searchValue = this.value.toLowerCase();
+            const playerRows = document.querySelectorAll('.player-row');
+            
+            playerRows.forEach(row => {
+                const playerName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                if (playerName.includes(searchValue)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    }
+    
+    // Aplicar las clases correctas según el tema actual
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    if (currentTheme === 'dark') {
+        // Aplicar estilos específicos para el tema oscuro
+        document.querySelectorAll('.win-text').forEach(el => {
+            el.classList.remove('text-success');
+            el.style.color = 'var(--win-text)';
+        });
+        
+        document.querySelectorAll('.loss-text').forEach(el => {
+            el.classList.remove('text-danger');
+            el.style.color = 'var(--loss-text)';
+        });
+    }
+});
+</script>
+{% endblock %}
