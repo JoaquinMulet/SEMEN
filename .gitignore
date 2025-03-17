@@ -12,3 +12,6 @@ __pycache__/
 
 # Directorio de instancia
 instance/
+
+# Archivo de reglas de WindSurf
+.windsurfrules
