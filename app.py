@@ -113,7 +113,7 @@ def create_app():
                 logger.info(f"No se encontró base de datos local en: {db_path}")
     
     # Configurar SQLAlchemy para mostrar consultas SQL
-    app.config['SQLALCHEMY_ECHO'] = True
+    app.config['SQLALCHEMY_ECHO'] = False
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your-secret-key')
     
