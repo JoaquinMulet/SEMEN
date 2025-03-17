@@ -21,6 +21,13 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your-secret-key')
     
+    # Código a añadir en app.py cerca de la configuración de la base de datos
+    volume_path = os.environ.get('RAILWAY_VOLUME_MOUNT_PATH')
+    if volume_path and os.path.exists(os.path.join(volume_path, 'instance', 'football_league.db')):
+        db_path = os.path.join(volume_path, 'instance', 'football_league.db')
+        app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{db_path}"
+        print(f"Usando base de datos en volumen: {db_path}")
+
     # Initialize the database
     db.init_app(app)
     
