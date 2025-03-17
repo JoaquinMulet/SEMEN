@@ -9,3 +9,6 @@ __pycache__/
 .idea/
 *.sublime-workspace
 *.sublime-project
+
+# Directorio de instancia
+instance/
